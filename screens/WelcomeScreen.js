@@ -1,97 +1,66 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import colors from '../constants/colors';
+import BackgroundWrapper from '../components/BackgroundWrapper';
+
+
 
 const screenWidth = Dimensions.get('window').width;
 
 
 export default function WelcomeScreen({ navigation }) {
     return (
-        <View style={styles.container}>
-            <Image
-                source={require('../assets/images/paw.png')}
-                style={[styles.paw, styles.pawTopLeft]}
-            />
-            <Image
-                source={require('../assets/images/paw.png')}
-                style={[styles.paw, styles.pawTopRight]}
-            />
-            <Image
-                source={require('../assets/images/paw.png')}
-                style={[styles.paw, styles.pawBottomLeft]}
-            />
-            <Image
-                source={require('../assets/images/paw.png')}
-                style={[styles.paw, styles.pawBottomRight]}
-            />
-            <View style={styles.headerLeft}>
-                <Text style={styles.header}>Welcome to</Text>
-            </View>
+        <BackgroundWrapper>
+            <View style={styles.container}>
+                {/* Pealkiri */}
+                <View style={styles.headerLeft}>
+                    <Text style={styles.header}>Welcome to</Text>
+                </View>
+                <View style={styles.headerRight}>
+                    <Image
+                        source={require('../assets/images/pawpal-logo.png')}
+                        style={styles.logo}
+                        resizeMode="contain"
+                    />
+                </View>
 
-            <View style={styles.headerRight}>
+                {/* Pilt */}
                 <Image
-                    source={require('../assets/images/pawpal-logo.png')}
-                    style={styles.logo}
-                    resizeMode="contain"
+                    source={require('../assets/images/welcome-pets.png')}
+                    style={styles.image}
+                    resizeMode="cover"
                 />
+
+                {/* Info tekst */}
+                <Text style={styles.info}>
+                    Trusted by 5,000+ Verified Sitters{'\n'}
+                    Your pet's care is our priority. Backed by a{'\n'}
+                    Money-Back Guarantee, we ensure safety and{'\n'}
+                    satisfaction with every booking.
+                </Text>
+
+                {/* Nupud */}
+                <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.loginText}>Login</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.registerBtn} onPress={() => navigation.navigate('Register')}>
+                    <Text style={styles.registerText}>Register</Text>
+                </TouchableOpacity>
+
+                {/* Külalisena jätkamine */}
+                <Text style={styles.guestText}>Continue as a guest</Text>
             </View>
-            <Image
-                source={require('../assets/images/welcome-pets.png')}
-                style={styles.image}
-                resizeMode="cover"
-            />
-            <Text style={styles.info}>
-                Trusted by 5,000+ Verified Sitters{'\n'}
-                Your pet's care is our priority. Backed by a{'\n'}
-                Money-Back Guarantee, we ensure safety and{'\n'}
-                satisfaction with every booking.
-            </Text>
-            <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.loginText}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.registerBtn} onPress={() => navigation.navigate('Register')}>
-                <Text style={styles.registerText}>Register</Text>
-            </TouchableOpacity>
-            <Text style={styles.guestText}>Continue as a guest</Text>
-        </View>
+        </BackgroundWrapper>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.white,
+        backgroundColor: 'transparent',
         alignItems: 'center',
         paddingTop: 60,
-        zIndex: 0, // et paw pildid oleksid taga
-    },
-    paw: {
-        position: 'absolute',
-        width: 75,
-        height: 75,
-        opacity: 1, // et oleks diskreetne
         zIndex: 1, // et paw pildid oleksid taga
-
-    },
-    pawTopLeft: {
-        top: 100,
-        left: -15,
-        transform: [{ rotate: '-30deg' }],
-    },
-    pawTopRight: {
-        top: 20,
-        right: 20,
-        transform: [{ rotate: '20deg' }],
-    },
-    pawBottomLeft: {
-        bottom: 100,
-        left: -20,
-        transform: [{ rotate: '-20deg' }],
-    },
-    pawBottomRight: {
-        bottom: 50,
-        right: -10,
-        transform: [{ rotate: '-90deg' }],
     },
     headerLeft: {
         width: '100%',
