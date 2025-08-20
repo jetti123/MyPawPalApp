@@ -11,7 +11,7 @@ export default function LoginScreen({ navigation }) {
     return (
         <BackgroundWrapper>
             {/* Tagasi-nool */}
-            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate('Welcome')}>
+            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
                 <Ionicons name="arrow-back" size={28} color={colors.brown} />
             </TouchableOpacity>
 
@@ -40,7 +40,7 @@ export default function LoginScreen({ navigation }) {
 
                 <View style={styles.orRow}>
                     <View style={styles.line} />
-                    <Text style={styles.orText}>Or Register with</Text>
+                    <Text style={styles.orText}>Or Login with</Text>
                     <View style={styles.line} />
                 </View>
 
@@ -75,18 +75,18 @@ const styles = StyleSheet.create({
         paddingTop: 120,
     },
     title: {
-        fontSize: Platform.OS === 'ios' ? 20 : 24,
+        fontSize: Platform.OS === 'ios' ? 20 : 26,
         color: colors.black,
         marginBottom: 60,
         width: '100%',              // kogu rida
-        paddingLeft: 40,
+        paddingLeft: 20,
     },
     input: {
         backgroundColor: colors.white,
         borderRadius: 30,
         borderWidth: 1,
         borderColor: '#eee',
-        paddingHorizontal: 18,
+        paddingHorizontal: 25,
         paddingVertical: 12,
         fontSize: 12,
         marginBottom: 18,
@@ -95,11 +95,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.30,
         shadowRadius: 6,
         elevation: 4,
-     },
+    },
     forgot: {
         alignSelf: 'flex-end',
         color: colors.black,
-        fontSize: Platform.OS === 'ios' ? 11 : 12,
+        fontSize: Platform.OS === 'ios' ? 10 : 12,
         marginTop: 10,
         marginBottom: 30,
         marginRight: 2,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     orText: {
         marginHorizontal: 10,
         color: '#888',
-        fontSize: 13,
+        fontSize: 11,
     },
     line: {
         flex: 1,
