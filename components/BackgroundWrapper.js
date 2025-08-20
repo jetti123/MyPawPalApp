@@ -7,10 +7,18 @@ export default function BackgroundWrapper({ children }) {
   return (
     <View style={styles.wrapper}>
       {/* Käpajäljed taustal */}
-      <Ionicons name="paw-outline" size={60} color={colors.brown} style={styles.topLeft} />
-      <Ionicons name="paw-outline" size={60} color={colors.brown} style={styles.topRight} />
-      <Ionicons name="paw-outline" size={60} color={colors.brown} style={styles.bottomLeft} />
-      <Ionicons name="paw-outline" size={60} color={colors.brown} style={styles.bottomRight} />
+      <View style={styles.topLeft}>
+        <Ionicons name="paw-outline" size={55} color={colors.brown} />
+      </View>
+      <View style={styles.topRight}>
+        <Ionicons name="paw-outline" size={55} color={colors.brown} />
+      </View>
+      <View style={styles.bottomLeft}>
+        <Ionicons name="paw-outline" size={55} color={colors.brown} />
+      </View>
+      <View style={styles.bottomRight}>
+        <Ionicons name="paw-outline" size={55} color={colors.brown} />
+      </View>
 
       {/* Laps (nt WelcomeScreen) */}
       <View style={styles.content}>
@@ -24,7 +32,8 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     position: 'relative',
-    backgroundColor: colors.white, 
+    backgroundColor: colors.white,
+    overflow: 'visible',
   },
   content: {
     flex: 1,
@@ -32,34 +41,50 @@ const styles = StyleSheet.create({
   },
   topLeft: {
     position: 'absolute',
-    top: 80,
+    top: 150,
     left: -10,
+    width: 60,         // lisa see
+    height: 60,        // lisa see
     transform: [{ rotate: '40deg' }],
     opacity: 0.2,
     zIndex: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   topRight: {
     position: 'absolute',
-    top: 30,
+    top: 80,
     right: 10,
+    width: 60,
+    height: 60,
     transform: [{ rotate: '20deg' }],
-    opacity: 0.3,
+    opacity: 0.2,
     zIndex: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bottomLeft: {
     position: 'absolute',
     bottom: 150,
     left: -10,
+    width: 60,
+    height: 60,
     transform: [{ rotate: '30deg' }],
     opacity: 0.2,
     zIndex: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bottomRight: {
     position: 'absolute',
     bottom: 50,
     right: -5,
+    width: 60,
+    height: 60,
     transform: [{ rotate: '-50deg' }],
-    opacity: 0.3,
+    opacity: 0.2,
     zIndex: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

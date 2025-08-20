@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'transparent',
         alignItems: 'center',
-        paddingTop: 60,
+        paddingTop: 120,
         zIndex: 1, // et paw pildid oleksid taga
     },
     headerLeft: {
