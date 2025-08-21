@@ -5,13 +5,16 @@ import colors from '../constants/colors';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function IWantToScreen() {
+export default function IWantToScreen({navigation}) {
   return (
     <BackgroundWrapper>
       <View style={styles.container}>
         <Text style={styles.title}>I want to:</Text>
 
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('ChooseService')}
+        >
           <FontAwesome6 name="person-walking" size={32} color={colors.brown} />
           <Text style={styles.cardText}>Find someone to take{'\n'}care of my pet</Text>
         </TouchableOpacity>
