@@ -3,4 +3,5 @@ export default {
   white: '#FFFFFF',
   blue: '#158BCD',
   black: '#1E1E1E',
+  placeholder: '#C7BEB7',
 };

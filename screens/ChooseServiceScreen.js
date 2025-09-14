@@ -99,9 +99,7 @@ export default function ChooseServiceScreen({ navigation }) {
                         <View key={service.key} style={styles.cardWrap}>
                             <TouchableOpacity
                                 style={styles.card}
-                                onPress={() => {
-                                    // navigationid siia
-                                }}
+                                onPress={() => navigation.navigate('CareDetails')}
                                 activeOpacity={0.8}
                             >
                                 {service.icon}
@@ -153,9 +151,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     title: {
-        fontSize: 24,
+        fontSize: 23,
         color: colors.black,
-        marginBottom: 20,
+        marginBottom: 16,
         textAlign: 'center',
     },
     grid: {
