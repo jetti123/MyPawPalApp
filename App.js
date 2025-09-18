@@ -9,6 +9,9 @@ import IWantToScreen from './screens/IWantToScreen';
 import ChooseServiceScreen from './screens/ChooseServiceScreen';
 import CareDetailsScreen from './screens/CareDetailsScreen';
 import HealthNeedsScreen from './screens/HealthNeedsScreen';
+import FeedingDetailsScreen from './screens/FeedingDetailsScreen';
+import BehaviorDetailsScreen from './screens/BehaviorDetailsScreen';
+import RoutineDetailsScreen from './screens/RoutineDetailsScreen';
 // impordi teised ekraanid hiljem
 
 const Stack = createStackNavigator();
@@ -24,6 +27,9 @@ export default function App() {
         <Stack.Screen name="ChooseService" component={ChooseServiceScreen} options={{ headerShown: false }} />
         <Stack.Screen name="CareDetails" component={CareDetailsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="HealthNeeds" component={HealthNeedsScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="FeedingDetails" component={FeedingDetailsScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="BehaviorDetails" component={BehaviorDetailsScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="RoutineDetails" component={RoutineDetailsScreen} options={{ headerShown: false }} />
         {/* Lisa teised ekraanid siia */}
       </Stack.Navigator>
     </NavigationContainer>

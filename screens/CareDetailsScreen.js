@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -11,69 +11,73 @@ export default function CareDetailsScreen({ navigation }) {
   const [age, setAge] = useState('');
 
   return (
-    <BackgroundWrapper>
-      <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={28} color={colors.brown} />
-      </TouchableOpacity>
-      <View style={styles.container}>
-        <Text style={styles.title}>Care Details:</Text>
-        <View style={styles.row}>
-          <View style={styles.avatarCircle}>
-            <Text style={styles.plus}>+</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={{ flex: 1 }}>
+        <BackgroundWrapper style={{ flex: 1 }}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={28} color={colors.brown} />
+          </TouchableOpacity>
+          <View style={styles.container}>
+            <Text style={styles.title}>Care Details:</Text>
+            <View style={styles.row}>
+              <View style={styles.avatarCircle}>
+                <Text style={styles.plus}>+</Text>
+              </View>
+              <View style={styles.inputCol}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your pet's name"
+                  value={name}
+                  onChangeText={setName}
+                  placeholderTextColor={colors.brown}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your pet's type"
+                  value={type}
+                  onChangeText={setType}
+                  placeholderTextColor={colors.brown}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your pet's breed"
+                  value={breed}
+                  onChangeText={setBreed}
+                  placeholderTextColor={colors.brown}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your pet's age"
+                  value={age}
+                  onChangeText={setAge}
+                  placeholderTextColor={colors.brown}
+                  keyboardType="numeric"
+                />
+              </View>
+            </View>
+            <TouchableOpacity style={styles.sectionBtn} onPress={() => navigation.navigate('HealthNeeds')}>
+              <Text style={styles.sectionText}>Health and medical needs</Text>
+              <Ionicons name="chevron-forward" size={22} color={colors.brown} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.sectionBtn} onPress={() => navigation.navigate('FeedingDetails')}>
+              <Text style={styles.sectionText}>Feeding details</Text>
+              <Ionicons name="chevron-forward" size={22} color={colors.brown} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.sectionBtn} onPress={() => navigation.navigate('BehaviorDetails')}>
+              <Text style={styles.sectionText}>Behavior</Text>
+              <Ionicons name="chevron-forward" size={22} color={colors.brown} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.sectionBtn} onPress={() => navigation.navigate('RoutineDetails')}>
+              <Text style={styles.sectionText}>Routine details</Text>
+              <Ionicons name="chevron-forward" size={22} color={colors.brown} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.nextBtn}>
+              <Text style={styles.nextText}>Next</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.inputCol}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your pet's name"
-              value={name}
-              onChangeText={setName}
-              placeholderTextColor={colors.brown}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your pet's type"
-              value={type}
-              onChangeText={setType}
-              placeholderTextColor={colors.brown}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your pet's breed"
-              value={breed}
-              onChangeText={setBreed}
-              placeholderTextColor={colors.brown}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your pet's age"
-              value={age}
-              onChangeText={setAge}
-              placeholderTextColor={colors.brown}
-              keyboardType="numeric"
-            />
-          </View>
+        </BackgroundWrapper>
         </View>
-        <TouchableOpacity style={styles.sectionBtn} onPress={() => navigation.navigate('HealthNeeds')}>
-          <Text style={styles.sectionText}>Health and medical needs</Text>
-          <Ionicons name="chevron-forward" size={22} color={colors.brown} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sectionBtn} onPress={() => navigation.navigate('FeedingDetails')}>
-          <Text style={styles.sectionText}>Feeding details</Text>
-          <Ionicons name="chevron-forward" size={22} color={colors.brown} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sectionBtn} onPress={() => navigation.navigate('BehaviorDetails')}>
-          <Text style={styles.sectionText}>Behavior</Text>
-          <Ionicons name="chevron-forward" size={22} color={colors.brown} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sectionBtn} onPress={() => navigation.navigate('RoutineDetails')}>
-          <Text style={styles.sectionText}>Routine details</Text>
-          <Ionicons name="chevron-forward" size={22} color={colors.brown} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.nextBtn}>
-          <Text style={styles.nextText}>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </BackgroundWrapper>
+    </TouchableWithoutFeedback>
   );
 }
 
