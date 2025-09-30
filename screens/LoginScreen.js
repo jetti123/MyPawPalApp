@@ -1,13 +1,45 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Platform } from 'react-native';
+
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../constants/firebase';
 
 export default function LoginScreen({ navigation }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert("Error", "Please enter both email and password");
+            return;
+        }
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            navigation.navigate('IWantTo'); // Ainult õnnestumisel
+        } catch (error) {
+            Alert.alert("Login failed", error.message);
+        }
+    };
+
+    const handleForgotPassword = async () => {
+        if (!email) {
+            Alert.alert("Error", "Please enter your email first");
+            return;
+        }
+        try {
+            await sendPasswordResetEmail(auth, email);
+            Alert.alert("Success", "Password reset email sent! Check your inbox.");
+        } catch (error) {
+            Alert.alert("Error", error.message);
+        }
+    };
+
     return (
         <BackgroundWrapper>
             {/* Tagasi-nool */}
@@ -22,19 +54,24 @@ export default function LoginScreen({ navigation }) {
                     style={styles.input}
                     placeholder="Enter your email or username"
                     placeholderTextColor="#bbb"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
                     placeholderTextColor="#bbb"
                     secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
                 />
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleForgotPassword}>
                     <Text style={styles.forgot}>Forgot your password?</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('IWantTo')}>
+                <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
                     <Text style={styles.loginText}>Login</Text>
                 </TouchableOpacity>
 

@@ -19,7 +19,10 @@ export default function IWantToScreen({navigation}) {
           <Text style={styles.cardText}>Find someone to take{'\n'}care of my pet</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity 
+          style={styles.card}
+          onPress={() => navigation.navigate('SitterProfile')}
+        >
           <Ionicons name="paw-outline" size={32} color={colors.brown} />
           <Text style={styles.cardText}>Take care of someone's{'\n'}pet</Text>
         </TouchableOpacity>
