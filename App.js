@@ -13,7 +13,6 @@ import FeedingDetailsScreen from './screens/FeedingDetailsScreen';
 import BehaviorDetailsScreen from './screens/BehaviorDetailsScreen';
 import RoutineDetailsScreen from './screens/RoutineDetailsScreen';
 import SitterProfileScreen from './screens/SitterProfileScreen';
-// impordi teised ekraanid hiljem
 
 const Stack = createStackNavigator();
 

@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
     },
     image: {
         width: screenWidth,
-        height: screenWidth * 0.4,  // võid mängida nt 0.4, 0.6 jne
+        height: screenWidth * 0.4,  
         marginTop: 30,
         marginBottom: 40,
-        borderRadius: 8, // kui soovid nurki ümardada (valikuline)
+        borderRadius: 8, 
     },
     info: {
         color: colors.black,

@@ -37,14 +37,14 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    zIndex: 1, // toob sisu käppade kohale
+    zIndex: 1, 
   },
   topLeft: {
     position: 'absolute',
     top: 150,
     left: -10,
-    width: 60,         // lisa see
-    height: 60,        // lisa see
+    width: 60,         
+    height: 60,        
     transform: [{ rotate: '40deg' }],
     opacity: 0.2,
     zIndex: 0,

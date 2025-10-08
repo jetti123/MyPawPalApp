@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback, Image, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { db, auth } from '../constants/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 export default function SitterProfileScreen({ navigation }) {
     const [name, setName] = useState('');
@@ -13,6 +13,31 @@ export default function SitterProfileScreen({ navigation }) {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
     const [selectedServices, setSelectedServices] = useState([]);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const docRef = doc(db, "sitters", user.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    setName(data.name || '');
+                    setLocation(data.location || '');
+                    setDescription(data.description || '');
+                    setSelectedServices(data.services || []);
+                    setImage(data.image || null);
+                }
+            } catch (error) {
+                console.error("Error fetching sitter profile:", error);
+            }
+        };
+
+        fetchProfile();
+    }, []);
 
     const services = [
         "In-home pet sitting",
@@ -52,7 +77,7 @@ export default function SitterProfileScreen({ navigation }) {
             setImage(result.assets[0].uri);
         }
     };
-    const handleSave = async () => {
+    const handleSaveProfile = async () => {
         try {
             const user = auth.currentUser;
             if (!user) {
@@ -149,7 +174,7 @@ export default function SitterProfileScreen({ navigation }) {
                                 </TouchableOpacity>
                             ))}
 
-                            <TouchableOpacity style={styles.nextBtn} onPress={handleSave}>
+                            <TouchableOpacity style={styles.nextBtn} onPress={handleSaveProfile}>
                                 <Text style={styles.nextText}>Save and continue</Text>
                             </TouchableOpacity>
                         </View>

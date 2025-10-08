@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.10,
     shadowRadius: 4,
     elevation: 2,
-    width: 200,         // <-- Lisa see rida (või nt 150, 200 vastavalt soovile)
+    width: 200,         
 
   },
   sectionBtn: {

@@ -15,7 +15,7 @@ export default function HealthNeedsScreen({ navigation }) {
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                keyboardVerticalOffset={30} // proovi 100 või isegi 120  >
+                keyboardVerticalOffset={30} 
             >
                 <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
                     <BackgroundWrapper>
@@ -39,7 +39,7 @@ export default function HealthNeedsScreen({ navigation }) {
                                     onChangeText={setAllergies}
                                     placeholderTextColor={colors.placeholder}
                                     multiline={true}
-                                    numberOfLines={3} // nt 3 rida, piirab kõrguse
+                                    numberOfLines={3} 
                                     maxLength={200}
                                     returnKeyType="default"
 
@@ -53,7 +53,7 @@ export default function HealthNeedsScreen({ navigation }) {
                                     value={medications}
                                     onChangeText={setMedications}
                                     placeholderTextColor={colors.placeholder}
-                                    multiline={true} // Lisa see!
+                                    multiline={true} 
                                     numberOfLines={3}
                                     maxLength={200}
                                     returnKeyType="default"
@@ -67,7 +67,7 @@ export default function HealthNeedsScreen({ navigation }) {
                                     value={vetContact}
                                     onChangeText={setVetContact}
                                     placeholderTextColor={colors.placeholder}
-                                    multiline={true} // Lisa see!
+                                    multiline={true} 
                                     numberOfLines={3}
                                     maxLength={200}
                                     returnKeyType="default"
