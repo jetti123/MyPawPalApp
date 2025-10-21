@@ -1,14 +1,107 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, Image, TouchableWithoutFeedback } from 'react-native';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import * as ImagePicker from 'expo-image-picker';
+import { auth, db } from '../constants/firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 export default function CareDetailsScreen({ navigation }) {
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [breed, setBreed] = useState('');
   const [age, setAge] = useState('');
+  const [image, setImage] = useState(null);
+  const [originalData, setOriginalData] = useState(null);
+
+  useEffect(() => {
+    const fetchPetDetails = async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        const docRef = doc(db, "pets", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setName(data.name || '');
+          setType(data.type || '');
+          setBreed(data.breed || '');
+          setAge(data.age || '');
+          setImage(data.image || null);
+          setOriginalData(data);
+        }
+      } catch (error) {
+        console.error("Error fetching pet details:", error);
+      }
+    };
+
+    fetchPetDetails();
+  }, []);
+
+  const hasChanged = () => {
+    if (!originalData) return true;
+
+    return (
+      originalData.name !== name ||
+      originalData.type !== type ||
+      originalData.breed !== breed ||
+      originalData.age !== age ||
+      originalData.image !== image
+    );
+  };
+
+
+  const pickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access gallery is required!");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleSaveDetails = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    if (!hasChanged()) {
+    navigation.navigate('PickSitter');
+    return;
+  }
+
+  const petData = {
+    ownerId: user.uid,
+    name,
+    type,
+    breed,
+    age,
+    image,
+    updatedAt: new Date()
+  };
+
+  try {
+    await setDoc(doc(db, "pets", user.uid), petData, { merge: true });
+    setOriginalData(petData);
+    navigation.navigate('PickSitter');
+  } catch (error) {
+    console.error("Error saving pet details:", error);
+    Alert.alert("Failed to save", "Something went wrong while saving pet details.");
+  }
+};
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -20,9 +113,13 @@ export default function CareDetailsScreen({ navigation }) {
           <View style={styles.container}>
             <Text style={styles.title}>Care Details:</Text>
             <View style={styles.row}>
-              <View style={styles.avatarCircle}>
-                <Text style={styles.plus}>+</Text>
-              </View>
+              <TouchableOpacity style={styles.avatarCircle} onPress={pickImage}>
+                {image ? (
+                  <Image source={{ uri: image }} style={styles.avatarImage} />
+                ) : (
+                  <Text style={styles.plus}>+</Text>
+                )}
+              </TouchableOpacity>
               <View style={styles.inputCol}>
                 <TextInput
                   style={styles.input}
@@ -71,12 +168,12 @@ export default function CareDetailsScreen({ navigation }) {
               <Text style={styles.sectionText}>Routine details</Text>
               <Ionicons name="chevron-forward" size={22} color={colors.brown} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.nextBtn}>
+            <TouchableOpacity style={styles.nextBtn} onPress={handleSaveDetails}>
               <Text style={styles.nextText}>Next</Text>
             </TouchableOpacity>
           </View>
         </BackgroundWrapper>
-        </View>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -98,7 +195,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: colors.black,
     marginBottom: 16,
-    textAlign: 'left',         // vasakule joondus
+    textAlign: 'left',
     marginLeft: 150,
   },
   row: {
@@ -124,6 +221,11 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 4,
   },
+  avatarImage: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+  },
   plus: {
     fontSize: 36,
     color: colors.brown,
@@ -148,7 +250,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.10,
     shadowRadius: 4,
     elevation: 2,
-    width: 200,         
+    width: 200,
 
   },
   sectionBtn: {

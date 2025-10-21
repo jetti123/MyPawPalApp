@@ -111,7 +111,7 @@ export default function SitterProfileScreen({ navigation }) {
                     </TouchableOpacity>
 
                     <ScrollView
-                        contentContainerStyle={{ flexGrow: 1 }}
+                        contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
                         keyboardShouldPersistTaps="handled"
                         showsVerticalScrollIndicator={false}
                     >
@@ -296,6 +296,7 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
         paddingHorizontal: 40,
         marginTop: 18,
+        marginBottom: 20,
         width: '90%',
         alignItems: 'center',
         alignSelf: 'center',

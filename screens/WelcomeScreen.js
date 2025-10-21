@@ -33,7 +33,7 @@ export default function WelcomeScreen({ navigation }) {
 
                 {/* Info tekst */}
                 <Text style={styles.info}>
-                    Trusted by 5,000+ Verified Sitters{'\n'}
+                    
                     Your pet's care is our priority. Backed by a{'\n'}
                     Money-Back Guarantee, we ensure safety and{'\n'}
                     satisfaction with every booking.

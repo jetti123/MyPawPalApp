@@ -13,6 +13,9 @@ import FeedingDetailsScreen from './screens/FeedingDetailsScreen';
 import BehaviorDetailsScreen from './screens/BehaviorDetailsScreen';
 import RoutineDetailsScreen from './screens/RoutineDetailsScreen';
 import SitterProfileScreen from './screens/SitterProfileScreen';
+import PickSitterScreen from './screens/PickSitterScreen';
+import ViewSitterScreen from './screens/ViewSitterScreen';
+
 
 const Stack = createStackNavigator();
 
@@ -31,6 +34,8 @@ export default function App() {
         <Stack.Screen name="BehaviorDetails" component={BehaviorDetailsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="RoutineDetails" component={RoutineDetailsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SitterProfile" component={SitterProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="PickSitter" component={PickSitterScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="ViewSitter" component={ViewSitterScreen} options={{ headerShown: false }} />
         {/* Lisa teised ekraanid siia */}
       </Stack.Navigator>
     </NavigationContainer>
