@@ -1,13 +1,61 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Keyboard, Pressable, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Keyboard, Pressable, ScrollView, Alert } from 'react-native';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { auth, db } from '../constants/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function FeedingDetailsScreen({ navigation }) {
     const [mealTimes, setMealTimes] = useState('');
     const [foodType, setFoodType] = useState('');
     const [specialDiet, setSpecialDiet] = useState('');
+
+    useEffect(() => {
+        const fetchFeedingData = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const feedingRef = doc(db, "pets", user.uid, "feeding", "details");
+                const docSnap = await getDoc(feedingRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    setMealTimes(data.mealTimes || '');
+                    setFoodType(data.foodType || '');
+                    setSpecialDiet(data.specialDiet || '');
+                }
+            } catch (error) {
+                console.error("Error fetching feeding data:", error);
+            }
+        };
+
+        fetchFeedingData();
+    }, []);
+
+    const handleSave = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const feedingRef = doc(db, "pets", user.uid, "feeding", "details");
+
+            await setDoc(feedingRef, {
+                mealTimes,
+                foodType,
+                specialDiet,
+                updatedAt: new Date(),
+            });
+
+            Alert.alert("Success", "Feeding details saved!");
+            navigation.goBack();
+        } catch (error) {
+            console.error("Error saving feeding data:", error);
+            Alert.alert("Error", "Failed to save feeding details.");
+        }
+    };
+
 
     return (
         <KeyboardAvoidingView
@@ -71,7 +119,7 @@ export default function FeedingDetailsScreen({ navigation }) {
                             />
                             <Text style={styles.charCount}>{specialDiet.length}/200</Text>
 
-                            <TouchableOpacity style={styles.saveBtn} onPress={() => navigation.goBack()}>
+                            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
                                 <Text style={styles.saveText}>Save</Text>
                             </TouchableOpacity>
                         </View>

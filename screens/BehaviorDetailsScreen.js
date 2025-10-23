@@ -1,13 +1,61 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Keyboard, Pressable, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Keyboard, Pressable, ScrollView, Alert } from 'react-native';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { auth, db } from '../constants/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function BehaviorDetailsScreen({ navigation }) {
     const [temperament, setTemperament] = useState('');
     const [playtime, setPlaytime] = useState('');
     const [triggers, setTriggers] = useState('');
+
+    useEffect(() => {
+        const fetchBehaviorData = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const behaviorRef = doc(db, "pets", user.uid, "behavior", "details");
+                const docSnap = await getDoc(behaviorRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    setTemperament(data.temperament || '');
+                    setPlaytime(data.playtime || '');
+                    setTriggers(data.triggers || '');
+                }
+            } catch (error) {
+                console.error("Error fetching behavior data:", error);
+            }
+        };
+
+        fetchBehaviorData();
+    }, []);
+
+    const handleSave = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const behaviorRef = doc(db, "pets", user.uid, "behavior", "details");
+
+            await setDoc(behaviorRef, {
+                temperament,
+                playtime,
+                triggers,
+                updatedAt: new Date(),
+            });
+
+            Alert.alert("Success", "Behavior details saved!");
+            navigation.goBack();
+        } catch (error) {
+            console.error("Error saving behavior data:", error);
+            Alert.alert("Error", "Failed to save behavior details.");
+        }
+    };
+
 
     return (
         <KeyboardAvoidingView
@@ -71,7 +119,7 @@ export default function BehaviorDetailsScreen({ navigation }) {
                             />
                             <Text style={styles.charCount}>{triggers.length}/200</Text>
 
-                            <TouchableOpacity style={styles.saveBtn} onPress={() => navigation.goBack()}>
+                            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
                                 <Text style={styles.saveText}>Save</Text>
                             </TouchableOpacity>
                         </View>

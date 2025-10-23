@@ -1,13 +1,61 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Keyboard, Pressable, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Keyboard, Pressable, ScrollView, Alert } from 'react-native';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { auth, db } from '../constants/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+
 
 export default function RoutineDetailsScreen({ navigation }) {
     const [walkTimes, setWalkTimes] = useState('');
     const [walkDuration, setWalkDuration] = useState('');
     const [pottyBreaks, setPottyBreaks] = useState('');
+
+    useEffect(() => {
+        const fetchRoutineData = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const routineRef = doc(db, "pets", user.uid, "routine", "details");
+                const docSnap = await getDoc(routineRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    setWalkTimes(data.walkTimes || '');
+                    setWalkDuration(data.walkDuration || '');
+                    setPottyBreaks(data.pottyBreaks || '');
+                }
+            } catch (error) {
+                console.error("Error fetching routine data:", error);
+            }
+        };
+
+        fetchRoutineData();
+    }, []);
+
+    const handleSave = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const routineRef = doc(db, "pets", user.uid, "routine", "details");
+
+            await setDoc(routineRef, {
+                walkTimes,
+                walkDuration,
+                pottyBreaks,
+                updatedAt: new Date(),
+            });
+
+            Alert.alert("Success", "Routine details saved!");
+            navigation.goBack();
+        } catch (error) {
+            console.error("Error saving routine data:", error);
+            Alert.alert("Error", "Failed to save routine details.");
+        }
+    };
 
     return (
         <KeyboardAvoidingView
@@ -71,7 +119,7 @@ export default function RoutineDetailsScreen({ navigation }) {
                             />
                             <Text style={styles.charCount}>{pottyBreaks.length}/200</Text>
 
-                            <TouchableOpacity style={styles.saveBtn} onPress={() => navigation.goBack()}>
+                            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
                                 <Text style={styles.saveText}>Save</Text>
                             </TouchableOpacity>
                         </View>

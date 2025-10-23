@@ -1,14 +1,62 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { KeyboardAvoidingView, Platform, Keyboard, Pressable, ScrollView } from 'react-native';
+import { auth, db } from '../constants/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export default function HealthNeedsScreen({ navigation }) {
     const [allergies, setAllergies] = useState('');
     const [medications, setMedications] = useState('');
     const [vetContact, setVetContact] = useState('');
+
+
+  useEffect(() => {
+    const fetchHealthData = async () => {
+    const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        const healthRef = doc(db, "pets", user.uid, "health", "details");
+        const docSnap = await getDoc(healthRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setAllergies(data.allergies || '');
+          setMedications(data.medications || '');
+          setVetContact(data.vetContact || '');
+        }
+      } catch (error) {
+        console.error("Error fetching health data:", error);
+      }
+    };
+
+    fetchHealthData();
+  }, []);
+
+  const handleSave = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      const healthRef = doc(db, "pets", user.uid, "health", "details");
+
+      await setDoc(healthRef, {
+        allergies,
+        medications,
+        vetContact,
+        updatedAt: new Date(),
+      });
+
+      Alert.alert("Success", "Health details saved!");
+      navigation.goBack();
+    } catch (error) {
+      console.error("Error saving health data:", error);
+      Alert.alert("Error", "Failed to save health details.");
+    }
+  };
 
     return (
         <>
@@ -75,7 +123,7 @@ export default function HealthNeedsScreen({ navigation }) {
                                 />
                                 <Text style={styles.charCount}>{vetContact.length}/300</Text>
 
-                                <TouchableOpacity style={styles.saveBtn} onPress={() => navigation.goBack()}>
+                                <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
                                     <Text style={styles.saveText}>Save</Text>
                                 </TouchableOpacity>
                             </View>
@@ -104,7 +152,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: colors.black,
         marginBottom: 32,
-        textAlign: 'left',         // vasakule joondus
+        textAlign: 'left',        
         marginLeft: 120,
     },
     label: {
