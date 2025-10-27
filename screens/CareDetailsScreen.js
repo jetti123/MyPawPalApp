@@ -7,13 +7,14 @@ import * as ImagePicker from 'expo-image-picker';
 import { auth, db } from '../constants/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-export default function CareDetailsScreen({ navigation }) {
+export default function CareDetailsScreen({ navigation, route }) {
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [breed, setBreed] = useState('');
   const [age, setAge] = useState('');
   const [image, setImage] = useState(null);
   const [originalData, setOriginalData] = useState(null);
+  const selectedService = route?.params?.selectedService || null;
 
   useEffect(() => {
     const fetchPetDetails = async () => {
@@ -79,7 +80,7 @@ export default function CareDetailsScreen({ navigation }) {
     if (!user) return;
 
     if (!hasChanged()) {
-    navigation.navigate('PickSitter');
+    navigation.navigate('PickSitter', { selectedService });
     return;
   }
 
@@ -96,7 +97,7 @@ export default function CareDetailsScreen({ navigation }) {
   try {
     await setDoc(doc(db, "pets", user.uid), petData, { merge: true });
     setOriginalData(petData);
-    navigation.navigate('PickSitter');
+    navigation.navigate('PickSitter', { selectedService });
   } catch (error) {
     console.error("Error saving pet details:", error);
     Alert.alert("Failed to save", "Something went wrong while saving pet details.");

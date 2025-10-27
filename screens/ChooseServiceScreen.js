@@ -99,7 +99,7 @@ export default function ChooseServiceScreen({ navigation }) {
                         <View key={service.key} style={styles.cardWrap}>
                             <TouchableOpacity
                                 style={styles.card}
-                                onPress={() => navigation.navigate('CareDetails')}
+                                 onPress={() => navigation.navigate('CareDetails', { selectedService: service.label })}
                                 activeOpacity={0.8}
                             >
                                 {service.icon}

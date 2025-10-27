@@ -20,7 +20,13 @@ export default function PickSitterScreen({ navigation, route }) {
                     sitterList.push({ id: doc.id, ...doc.data() });
                 });
                 const filtered = selectedService
-                    ? sitterList.filter(sitter => sitter.services && sitter.services.includes(selectedService))
+                    ? sitterList.filter(
+                        sitter =>
+                            Array.isArray(sitter.services) &&
+                            sitter.services.some(
+                                s => typeof s === 'string' && s.toLowerCase() === selectedService.toLowerCase()
+                            )
+                    )
                     : sitterList;
                 setSitters(filtered);
             } catch (error) {
