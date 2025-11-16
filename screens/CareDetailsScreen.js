@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Keyboard, Image, TouchableWithoutFeedback } from 'react-native';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import colors from '../constants/colors';
@@ -6,6 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { auth, db } from '../constants/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function CareDetailsScreen({ navigation, route }) {
   const [name, setName] = useState('');
@@ -15,6 +16,12 @@ export default function CareDetailsScreen({ navigation, route }) {
   const [image, setImage] = useState(null);
   const [originalData, setOriginalData] = useState(null);
   const selectedService = route?.params?.selectedService || null;
+
+  useFocusEffect(
+    useCallback(() => {
+      Keyboard.dismiss();
+    }, [])
+  );
 
   useEffect(() => {
     const fetchPetDetails = async () => {
